@@ -1,0 +1,28 @@
+<body style = "background-color: rgb(227,12,12); color: rgb(46,166,80)">
+
+
+
+<style>
+	body {			#before { targets this type of data in file, e.g. p {... targets paragraphs and changes
+		color: red
+	}
+</style>
+
+
+	
+create a new .css file and link it within the <head>
+link it with <link  rel="stylesheet" href="mystyle.css">>
+
+
+
+in the css file put the elements you want to target and how youd like to change it
+ul{
+    background-color: darkorange;
+}
+
+
+
+within html file, create an id with id = "..." within the opening tag of an element
+within css file, use a # to reference the id, now you can edit the style of this one element with id using {}
+
+within opening tag write class ="example", this can be referenced by .example
