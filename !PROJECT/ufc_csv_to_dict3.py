@@ -40,7 +40,9 @@ with open("ufc-fighters-statistics_all.csv") as data_file:
     weights = list()
     
     hwdict = dict()
-
+    orth = 0
+    southpaw = 0
+    switch = 0
     for fighter,data in fighters_dict2.items():
         height = data.get("height_cm")
         if height:
@@ -48,6 +50,14 @@ with open("ufc-fighters-statistics_all.csv") as data_file:
         weight = data.get("weight_in_kg")
         if weight:
             weights.append(weight)
+        stance = data.get("stance")
+        if stance == "Orthodox":
+            orth += 1
+        elif stance == "Southpaw":
+            southpaw += 1
+        elif stance == "Switch":
+            switch += 1
+        else: pass
         
         
         
@@ -60,14 +70,16 @@ def getmean(llist):
 print(getmean(weights))
 print(getmean(heights))
 
-import matplotlib.pyplot as plt
-plt.boxplot(heights, showmeans=True, meanline=True)
-plt.grid(axis="y")
-# bins = [ i for i in range(165, int(max(heights))+5, 5)]
-# plt.hist(heights, bins, ec="black")
-# bins = [ i for i in range(150, int(max(weights))+5, 10)]
-# plt.hist(weights, bins, ec="black")
-# plt.scatter(x=weights, y=heights)    
+stances_dict = {"orthodox":orth,"southpaw":southpaw,"switch":switch}
 
-        
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+
+plt.pie(stances_dict.values(),labels=stances_dict.keys())
+
+plt.show()
+
+            
         

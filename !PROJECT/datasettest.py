@@ -5,14 +5,14 @@ masterdict = {}
 
 
 
-# headlist = header.split(',')
-# for x in range(len(headlist)):
-#      print(headlist[x],x)
+headlist = header.split(',')
+for x in range(len(headlist)):
+     print(headlist[x],x)
 
-strip = []
-for line in f:
-    line = line.split(',')
-    print(line)
+# strip = []
+# for line in f:
+#     line = line.split(',')
+#     print(line)
 
     
 

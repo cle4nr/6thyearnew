@@ -1,0 +1,6 @@
+ideas for data analysis:
+
+-Boolean value for if fighter has a nickname
+-merge nationalities from other csv file, find which nationality has best stats eg. best takedown accuracy
+-find average height per weight class
+-find 
