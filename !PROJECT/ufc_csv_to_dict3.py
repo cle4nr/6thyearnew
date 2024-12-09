@@ -24,26 +24,26 @@ def weightcheck(weight):
         return 2
     else:
         return 1
+    
 with open("ufc-fighters-statistics_all.csv") as data_file:
     headers = data_file.readline().split(",")[1:]
     
-    fighters_dict2 = dict()
+    fighters_dict = dict()
     
     for line in data_file:
         name, data = line.strip().split(",", maxsplit=1)
         values = list()
         for value in data.split(","):
             values.append(convert_value(value))
-        fighters_dict2[name] = { headers[i]:values[i] for i in range(len(values)) }
+        fighters_dict[name] = { headers[i]:values[i] for i in range(len(values)) }
         
     heights = list()
     weights = list()
     
-    hwdict = dict()
     orth = 0
     southpaw = 0
     switch = 0
-    for fighter,data in fighters_dict2.items():
+    for fighter,data in fighters_dict.items():
         height = data.get("height_cm")
         if height:
             heights.append(height)
@@ -58,7 +58,36 @@ with open("ufc-fighters-statistics_all.csv") as data_file:
         elif stance == "Switch":
             switch += 1
         else: pass
-        
+    flw=dict()
+    bw=dict()
+    fw=dict()
+    lw=dict()
+    ww=dict()
+    mw=dict()
+    lhw=dict()
+    hw=dict()
+    
+    for fighter,data in fighters_dict.items():
+     weight = data.get("weight_in_kg")
+     if weight != '':
+        weight = float(weight)
+        if weightcheck(weight) == 1:
+            flw[fighter]=data
+        if weightcheck(weight) == 2:
+            bw[fighter]=data
+        if weightcheck(weight) == 3:
+            fw[fighter]=data
+        if weightcheck(weight) == 4:
+            lw[fighter]=data
+        if weightcheck(weight) == 5:
+            ww[fighter]=data
+        if weightcheck(weight) == 6:
+            mw[fighter]=data
+        if weightcheck(weight) == 7:
+            lhw[fighter]=data
+        if weightcheck(weight) == 8:
+            hw[fighter]=data
+            
         
         
 def getmean(llist):
@@ -72,14 +101,10 @@ print(getmean(heights))
 
 stances_dict = {"orthodox":orth,"southpaw":southpaw,"switch":switch}
 
-import numpy as np
-import matplotlib.pyplot as plt
-
-
-
-plt.pie(stances_dict.values(),labels=stances_dict.keys())
-
-plt.show()
+# import numpy as np
+# import matplotlib.pyplot as plt
+# plt.pie(stances_dict.values(),labels=stances_dict.keys())
+# plt.show()
 
             
         
