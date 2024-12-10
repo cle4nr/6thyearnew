@@ -99,7 +99,18 @@ def getmean(llist):
 print(getmean(weights))
 print(getmean(heights))
 
+<<<<<<< Updated upstream
 stances_dict = {"orthodox":orth,"southpaw":southpaw,"switch":switch}
+=======
+# import matplotlib.pyplot as plt
+# plt.boxplot(heights, showmeans=True, meanline=True)
+# plt.grid(axis="y")
+# bins = [ i for i in range(165, int(max(heights))+5, 5)]
+# plt.hist(heights, bins, ec="black")
+# bins = [ i for i in range(150, int(max(weights))+5, 10)]
+# plt.hist(weights, bins, ec="black")
+# plt.scatter(x=weights, y=heights)    
+>>>>>>> Stashed changes
 
 # import numpy as np
 # import matplotlib.pyplot as plt
