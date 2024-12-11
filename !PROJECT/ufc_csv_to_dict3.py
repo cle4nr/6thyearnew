@@ -7,6 +7,19 @@ def convert_value(value):
         except ValueError:
             pass
     return value
+
+def cm_to_ft_inch(cmheight):
+    import math
+    
+    inches = cmheight / 2.54
+    feet = inches / 12
+    frac, whole = math.modf(feet)
+    ftinch = frac *12
+    
+    print(f'{int(whole)} feet {round(ftinch)} inches')
+
+
+    
 def weightcheck(weight):
     if weight > 94:
         return 8
@@ -87,8 +100,18 @@ with open("ufc-fighters-statistics_all.csv") as data_file:
             lhw[fighter]=data
         if weightcheck(weight) == 8:
             hw[fighter]=data
+#     highwin = 0    
+#     for fighter,data in fighters_dict.items():
+#         wins = data.get("wins")
+#         
+#         if wins >= highwin:
+#             highwin = wins
             
-        
+#     for fighter,data in fighters_dict.items():
+#         wins = data.get("wins")
+#         if wins==253:
+#             print(fighter,data)
+    
         
 def getmean(llist):
     listsum = sum(llist)
@@ -96,25 +119,26 @@ def getmean(llist):
     mean = listsum / length
     return mean
 
-print(getmean(weights))
-print(getmean(heights))
+# print(getmean(weights))
+# print(getmean(heights))
 
-<<<<<<< Updated upstream
+# <<<<<<< Updated upstream
 stances_dict = {"orthodox":orth,"southpaw":southpaw,"switch":switch}
-=======
+# =======
 # import matplotlib.pyplot as plt
-# plt.boxplot(heights, showmeans=True, meanline=True)
-# plt.grid(axis="y")
-# bins = [ i for i in range(165, int(max(heights))+5, 5)]
+
 # plt.hist(heights, bins, ec="black")
 # bins = [ i for i in range(150, int(max(weights))+5, 10)]
 # plt.hist(weights, bins, ec="black")
 # plt.scatter(x=weights, y=heights)    
->>>>>>> Stashed changes
+# >>>>>>> Stashed changes
 
 # import numpy as np
 # import matplotlib.pyplot as plt
-# plt.pie(stances_dict.values(),labels=stances_dict.keys())
+# # plt.pie(stances_dict.values(),labels=stances_dict.keys())
+# plt.boxplot(weights, showmeans=True, meanline=True)
+# plt.grid(axis="y")
+# bins = [ i for i in range(165, int(max(heights))+5, 5)]
 # plt.show()
 
             
