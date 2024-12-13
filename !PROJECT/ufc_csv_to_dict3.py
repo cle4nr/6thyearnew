@@ -100,6 +100,16 @@ with open("ufc-fighters-statistics_all.csv") as data_file:
             lhw[fighter]=data
         if weightcheck(weight) == 8:
             hw[fighter]=data
+            
+    hwheightlist = list()
+    for fighter,data in hw.items():
+        hwheight = data.get('height_cm')
+        if hwheight != '':
+            hwheight = int(hwheight)
+            hwheightlist.append(hwheight)
+
+        
+            
 #     highwin = 0    
 #     for fighter,data in fighters_dict.items():
 #         wins = data.get("wins")
@@ -133,13 +143,13 @@ stances_dict = {"orthodox":orth,"southpaw":southpaw,"switch":switch}
 # plt.scatter(x=weights, y=heights)    
 # >>>>>>> Stashed changes
 
-# import numpy as np
-# import matplotlib.pyplot as plt
-# # plt.pie(stances_dict.values(),labels=stances_dict.keys())
-# plt.boxplot(weights, showmeans=True, meanline=True)
+import numpy as np
+import matplotlib.pyplot as plt
+plt.pie(stances_dict.values(),labels=stances_dict.keys())
+# plt.boxplot(hwheightlist, showmeans=True, meanline=True)
 # plt.grid(axis="y")
 # bins = [ i for i in range(165, int(max(heights))+5, 5)]
-# plt.show()
+plt.show()
 
             
         
