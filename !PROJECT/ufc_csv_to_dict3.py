@@ -102,12 +102,13 @@ with open("ufc-fighters-statistics_all.csv") as data_file:
             hw[fighter]=data
             
     hwheightlist = list()
+    hworthlist = list()
     for fighter,data in hw.items():
         hwheight = data.get('height_cm')
         if hwheight != '':
             hwheight = int(hwheight)
             hwheightlist.append(hwheight)
-
+        
         
             
 #     highwin = 0    
