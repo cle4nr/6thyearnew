@@ -110,18 +110,33 @@ with open("ufc-fighters-statistics_all.csv") as data_file:
             hwheightlist.append(hwheight)
         
         
-            
+# --- most wins ---        
 #     highwin = 0    
 #     for fighter,data in fighters_dict.items():
 #         wins = data.get("wins")
 #         
 #         if wins >= highwin:
 #             highwin = wins
-            
+#             
 #     for fighter,data in fighters_dict.items():
 #         wins = data.get("wins")
 #         if wins==253:
 #             print(fighter,data)
+
+# --- most losses ---        
+#     highloss = 0    
+#     for fighter,data in fighters_dict.items():
+#         losses = data.get("losses")
+#         
+#         if losses >= highloss:
+#             highloss = losses
+#           
+#             
+#     for fighter,data in fighters_dict.items():
+#         losses = data.get("losses")
+#         if losses == 83:
+#             print(fighter,data)
+
     
         
 def getmean(llist):
@@ -144,13 +159,16 @@ stances_dict = {"orthodox":orth,"southpaw":southpaw,"switch":switch}
 # plt.scatter(x=weights, y=heights)    
 # >>>>>>> Stashed changes
 
-import numpy as np
-import matplotlib.pyplot as plt
-plt.pie(stances_dict.values(),labels=stances_dict.keys())
+
 # plt.boxplot(hwheightlist, showmeans=True, meanline=True)
 # plt.grid(axis="y")
 # bins = [ i for i in range(165, int(max(heights))+5, 5)]
-plt.show()
+
+# --- stances pie chart ---
+# import numpy as np
+# import matplotlib.pyplot as plt
+# plt.pie(stances_dict.values(),labels=stances_dict.keys())
+# plt.show()
 
             
         
