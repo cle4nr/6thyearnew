@@ -1,3 +1,37 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import datetime
+import firebase_admin
+from firebase_admin import db
+from firebase_admin import credentials
+
+
+#when displaying data, only use data that != 0, lots missing
+
+
+def getmean(llist):
+    listsum = sum(llist)
+    length = len(llist)
+    mean = listsum / length
+    return mean
+
+
+def getage(dob):
+    if dob == 'n/a':
+        return 'not recorded'
+    else:
+        year,month,day = map(int,dob.split('-'))
+        today = datetime.date.today()
+        age = today.year - year - ((today.month, today.day) < (month, day))
+        return age
+    
+    
+def dicreplacecomma(dic):
+    for fighter,data in dic.items():
+        for item in data:
+            item = item.replace('.',',')
+ 
+
 def convert_value(value):
     try:
         value = int(value)
@@ -21,26 +55,33 @@ def cm_to_ft_inch(cmheight):
 
     
 def weightcheck(weight):
-    if weight > 94:
-        return 8
-    elif weight > 84:
-        return 7
-    elif weight > 78:
-        return 6
-    elif weight > 71:
-        return 5
-    elif weight > 66:
-        return 4
-    elif weight > 62:
-        return 3
-    elif weight > 58:
-        return 2
-    else:
-        return 1
-    
+    if weight != 'n/a':
+        weight = int(weight)
+        if weight > 94:
+            return 8
+        elif weight > 84:
+            return 7
+        elif weight > 78:
+            return 6
+        elif weight > 71:
+            return 5
+        elif weight > 66:
+            return 4
+        elif weight > 62:
+            return 3
+        elif weight > 58:
+            return 2
+        else:
+            return 1
+        
+
+        
+        
+
+f = open('testwrite.csv','w')
 with open("ufc-fighters-statistics_all.csv") as data_file:
-    headers = data_file.readline().split(",")[1:]
-    
+    headersstring = data_file.readline().strip("\n")
+    headers = headersstring.split(",")[1:]
     fighters_dict = dict()
     
     for line in data_file:
@@ -48,21 +89,25 @@ with open("ufc-fighters-statistics_all.csv") as data_file:
         values = list()
         for value in data.split(","):
             values.append(convert_value(value))
-        fighters_dict[name] = { headers[i]:values[i] for i in range(len(values)) }
+        if '.' in name:
+            name = name.replace('.','')
+            name = name.replace("'","")
+            
+        fighters_dict[name] = {headers[i]:values[i] for i in range(len(values))}
         
     heights = list()
     weights = list()
+    
+    
     
     orth = 0
     southpaw = 0
     switch = 0
     for fighter,data in fighters_dict.items():
-        height = data.get("height_cm")
-        if height:
-            heights.append(height)
-        weight = data.get("weight_in_kg")
-        if weight:
-            weights.append(weight)
+        for v in data:
+            if data[v] == '':
+                data[v] = 'n/a'
+        date_ob = data.get("date_of_birth")
         stance = data.get("stance")
         if stance == "Orthodox":
             orth += 1
@@ -70,7 +115,58 @@ with open("ufc-fighters-statistics_all.csv") as data_file:
             southpaw += 1
         elif stance == "Switch":
             switch += 1
-        else: pass
+    greenfn = input("compare 2 fighter's data?(y/n) ")
+    if greenfn == 'y':
+        fighterin1 = input("enter a fighter's name: ")
+        fighterin2 = input("enter a different fighter's name: ")
+        print()
+        print(fighterin1,fighters_dict[fighterin1])
+        print()
+        print(fighterin2,fighters_dict[fighterin2])
+        print()
+        datanyl = input('enter a valid data point to compare: ')
+        fighter1data = fighters_dict[fighterin1].get(datanyl)
+        fighter2data = fighters_dict[fighterin2].get(datanyl)
+        print()
+        if datanyl == 'date_of_birth':
+            if getage(fighter1data) >= getage(fighter2data):
+                print(f"{fighterin1} is older.")
+                print(f"{fighterin1}, {datanyl}: {fighter1data}")
+                print(f"{fighterin2}, {datanyl}: {fighter2data}")
+            else:
+                print(f"{fighterin2} is older.")
+                print(f"{fighterin2}, {datanyl}: {fighter2data}")
+                print(f"{fighterin1}, {datanyl}: {fighter1data}")
+                
+        
+        elif fighter1data >= fighter2data:
+            print(f"{fighterin1}, {datanyl}: {fighter1data}")
+            print(f"{fighterin2}, {datanyl}: {fighter2data}")
+#             make so if data type is a digit that it compares both on bar chart
+
+            x = [fighterin1, fighterin2]
+            y = [fighter1data,fighter2data]
+            plt.bar(x,y,color = ['red','blue'])
+            plt.title(datanyl)
+            plt.show()
+        else:
+            print(f"{fighterin2}, {datanyl}: {fighter2data}")
+            print(f"{fighterin1}, {datanyl}: {fighter1data}")
+            x = [fighterin2, fighterin1]
+            y = [fighter1data, fighter2data]
+            plt.bar(x,y,color = ['red','blue'])
+            plt.title(datanyl)
+            plt.show()
+            
+    stances_dict = {"orthodox":orth,"southpaw":southpaw,"switch":switch}
+    piein = input('Stances Pie-chart(show): ')
+    if piein == 'show':
+        stances_dict = {"orthodox":orth,"southpaw":southpaw,"switch":switch}
+        plt.pie(stances_dict.values(),labels=stances_dict.keys(),autopct="%1.2f%%")
+        explode = (0,0.2,0)
+        plt.show()
+        
+        
     flw=dict()
     bw=dict()
     fw=dict()
@@ -79,96 +175,82 @@ with open("ufc-fighters-statistics_all.csv") as data_file:
     mw=dict()
     lhw=dict()
     hw=dict()
-    
+
     for fighter,data in fighters_dict.items():
-     weight = data.get("weight_in_kg")
-     if weight != '':
-        weight = float(weight)
-        if weightcheck(weight) == 1:
-            flw[fighter]=data
-        if weightcheck(weight) == 2:
-            bw[fighter]=data
-        if weightcheck(weight) == 3:
-            fw[fighter]=data
-        if weightcheck(weight) == 4:
-            lw[fighter]=data
-        if weightcheck(weight) == 5:
-            ww[fighter]=data
-        if weightcheck(weight) == 6:
-            mw[fighter]=data
-        if weightcheck(weight) == 7:
-            lhw[fighter]=data
-        if weightcheck(weight) == 8:
-            hw[fighter]=data
+         weight = data.get("weight_in_kg")
+         if weight != '':
+            weights.append(weight)
+            if weightcheck(weight) == 1:
+                flw[fighter]=data
+            if weightcheck(weight) == 2:
+                bw[fighter]=data
+            if weightcheck(weight) == 3:
+                fw[fighter]=data
+            if weightcheck(weight) == 4:
+                lw[fighter]=data
+            if weightcheck(weight) == 5:
+                ww[fighter]=data
+            if weightcheck(weight) == 6:
+                mw[fighter]=data
+            if weightcheck(weight) == 7:
+                lhw[fighter]=data
+            if weightcheck(weight) == 8:
+                hw[fighter]=data
+        
+        
             
     hwheightlist = list()
-    hworthlist = list()
     for fighter,data in hw.items():
         hwheight = data.get('height_cm')
         if hwheight != '':
-            hwheight = int(hwheight)
             hwheightlist.append(hwheight)
-        
-        
-# --- most wins ---        
-#     highwin = 0    
-#     for fighter,data in fighters_dict.items():
-#         wins = data.get("wins")
-#         
-#         if wins >= highwin:
-#             highwin = wins
-#             
-#     for fighter,data in fighters_dict.items():
-#         wins = data.get("wins")
-#         if wins==253:
-#             print(fighter,data)
-
-# --- most losses ---        
-#     highloss = 0    
-#     for fighter,data in fighters_dict.items():
-#         losses = data.get("losses")
-#         
-#         if losses >= highloss:
-#             highloss = losses
-#           
-#             
-#     for fighter,data in fighters_dict.items():
-#         losses = data.get("losses")
-#         if losses == 83:
-#             print(fighter,data)
+    hwmean = getmean(hwheightlist)
+    lhwheightlist = list()
+    for fighter,data in lhw.items():
+        lhwheight = data.get('height_cm')
+        if lhwheight != '':
+            lhwheightlist.append(lhwheight)
+    lhwmean = getmean(lhwheightlist)
+    mwheightlist = list()
+    for fighter,data in mw.items():
+        mwheight = data.get('height_cm')
+        if mwheight != '':
+            mwheightlist.append(mwheight)
+    mwmean = getmean(mwheightlist)
+    wwheightlist = list()
+    for fighter,data in ww.items():
+        wwheight = data.get('height_cm')
+        if wwheight != '':
+            wwheightlist.append(wwheight)
+    wwmean = getmean(wwheightlist)
+    lwheightlist = list()
+    for fighter,data in lw.items():
+        lwheight = data.get('height_cm')
+        if lwheight != '':
+            lwheightlist.append(lwheight)
+    lwmean = getmean(lwheightlist)
+    fwheightlist = list()
+    for fighter,data in fw.items():
+        fwheight = data.get('height_cm')
+        if fwheight != '':
+            fwheightlist.append(fwheight)
+    fwmean = getmean(fwheightlist)
+    bwheightlist = list()
+    for fighter,data in bw.items():
+        bwheight = data.get('height_cm')
+        if bwheight != '':
+            bwheightlist.append(bwheight)
+    bwmean = getmean(bwheightlist)
+    flwheightlist = list()
+    for fighter,data in flw.items():
+        flwheight = data.get('height_cm')
+        if flwheight != '':
+            flwheightlist.append(flwheight)
+    flwmean = getmean(flwheightlist)
 
     
         
-def getmean(llist):
-    listsum = sum(llist)
-    length = len(llist)
-    mean = listsum / length
-    return mean
+        
 
-# print(getmean(weights))
-# print(getmean(heights))
-
-# <<<<<<< Updated upstream
-stances_dict = {"orthodox":orth,"southpaw":southpaw,"switch":switch}
-# =======
-# import matplotlib.pyplot as plt
-
-# plt.hist(heights, bins, ec="black")
-# bins = [ i for i in range(150, int(max(weights))+5, 10)]
-# plt.hist(weights, bins, ec="black")
-# plt.scatter(x=weights, y=heights)    
-# >>>>>>> Stashed changes
-
-
-# plt.boxplot(hwheightlist, showmeans=True, meanline=True)
-# plt.grid(axis="y")
-# bins = [ i for i in range(165, int(max(heights))+5, 5)]
-
-# --- stances pie chart ---
-# import numpy as np
-# import matplotlib.pyplot as plt
-# plt.pie(stances_dict.values(),labels=stances_dict.keys())
-# plt.show()
-
-            
+# ref.set(fighters_dict)
         
