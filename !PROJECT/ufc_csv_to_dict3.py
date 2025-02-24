@@ -315,8 +315,9 @@ if greenfn3 == 'y':
     plt.bar(x,y,color = ['green','blue'])
     plt.title(datanyl1)
     plt.show()
-    
-    
+
+#make another dictionary of all fighters or decide if it should be included at all
+#ref.set() the analytics for each weight class, aka all data that will be displayed on website e.g. amount of fighters per weight class, average height of weight classes etc
             
             
             
