@@ -4,7 +4,14 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 const firebaseConfig = {
-    
+    apiKey: "AIzaSyDQl-DLNTtMOrFqVSdMj8X9CCkz274pu2g",
+  authDomain: "test-299b9.firebaseapp.com",
+  databaseURL: "https://test-299b9-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "test-299b9",
+  storageBucket: "test-299b9.firebasestorage.app",
+  messagingSenderId: "787196357246",
+  appId: "1:787196357246:web:3e669eb3075a61303d062f",
+  measurementId: "G-LCJ0PKLM48"
   };
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
@@ -13,6 +20,12 @@ const app = initializeApp(firebaseConfig);
 import { getDatabase, ref, set, get, update, child, query, orderByChild, equalTo, remove, onValue } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
 const database = getDatabase();
 
+function processing(snapshot) {
+            console.log('Processing function')
+            console.log(snapshot.size)
+            snapshot.forEach(function(){console.log('Key =>',snapshot.key); console.log('Value =>',snapshot.val());})
+            let Fighters = snapshot.val();
+get(firebaseRef).then(processing);
 
 </script>
 <head>
