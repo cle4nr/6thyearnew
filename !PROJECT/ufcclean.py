@@ -5,7 +5,8 @@ import firebase_admin
 from firebase_admin import db
 from firebase_admin import credentials
 
-
+cred = credentials.Certificate("C:/Users/ronan/OneDrive/Documents/GitHub/6thyearnew/!PROJECT/test-299b9-firebase-adminsdk-73zi2-3fa7952a98.json")
+firebase_admin.initialize_app(cred,{'databaseURL':'https://test-299b9-default-rtdb.europe-west1.firebasedatabase.app/'})
 ref = db.reference('/')
 
 #when displaying data, only use data that != 0, lots missing

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Data Fetch</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div id="output"></div>
+    <canvas id="myChart"></canvas>
+    <script type="module">
+
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-analytics.js";
+        import { getDatabase, ref, set, get } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js'
+
+
+        const firebaseConfig = {
+
+            apiKey: "AIzaSyDQl-DLNTtMOrFqVSdMj8X9CCkz274pu2g",
+            authDomain: "test-299b9.firebaseapp.com",
+            databaseURL: "https://test-299b9-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "test-299b9",
+            storageBucket: "test-299b9.firebasestorage.app",
+            messagingSenderId: "787196357246",
+            appId: "1:787196357246:web:3e669eb3075a61303d062f",
+            measurementId: "G-LCJ0PKLM48"
+
+        };
+
+
+
+        const app = initializeApp(firebaseConfig);
+
+        const analytics = getAnalytics(app);
+
+
+        const app2 = initializeApp(firebaseConfig);
+        const database = getDatabase(app2);
+
+        function fetchData() {
+            const dataRef = ref(database, '1/Heights');
+            get(dataRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    console.log(data);
+                    visualiseData(data);
+                } else {
+                    console.log("No data available");
+                }
+            }).catch((error) => {
+                console.error("Error fetching data: ", error);
+            });
+        }
+        function displayData(data) {
+            const outputDiv = document.getElementById("output");
+            outputDiv.innerHTML = ''; 
+
+            if (typeof data === 'object') {
+               
+                const ul = document.createElement('ul');
+
+                for (const key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        const li = document.createElement('li');
+                        li.textContent = `${key}: ${data[key]}`; 
+                        ul.appendChild(li);
+                    }
+                }
+                outputDiv.appendChild(ul); 
+            } else {
+                outputDiv.textContent = data; 
+            }
+        }
+
+        function visualiseData(data) {
+            var ctx = document.getElementById('myChart').getContext('2d');
+
+            let labels = [];
+            let values = [];
+
+            for (const key in data) {
+                if (data.hasOwnProperty(key))
+                    labels.push(key);
+                values.push(data[key]);
+            }
+
+
+
+
+            var myChart = new Chart(ctx, {
+                type: 'bar', 
+                data: {
+                    labels: labels, 
+                    datasets: [{
+                        label: 'Average Heights', 
+                        data: values, 
+                        backgroundColor: 'rgba(155, 192, 12, 0.2)', 
+                        borderColor: 'rgba(75, 142, 182, 2)', 
+                        borderWidth: 1 
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true 
+                        }
+                    }
+                }
+            });
+        }
+
+        window.onload = fetchData;
+
+
+
+    </script>
+
+</body>
+
+
+
+</html>

@@ -1,46 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <script type="module">
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-const firebaseConfig = {
-    apiKey: "AIzaSyDQl-DLNTtMOrFqVSdMj8X9CCkz274pu2g",
-  authDomain: "test-299b9.firebaseapp.com",
-  databaseURL: "https://test-299b9-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "test-299b9",
-  storageBucket: "test-299b9.firebasestorage.app",
-  messagingSenderId: "787196357246",
-  appId: "1:787196357246:web:3e669eb3075a61303d062f",
-  measurementId: "G-LCJ0PKLM48"
-  };
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
+    import { initializeApp } from "firebase/app";
+    import { getAnalytics } from "firebase/analytics";
+    const firebaseConfig = {
+        apiKey: "AIzaSyDQl-DLNTtMOrFqVSdMj8X9CCkz274pu2g",
+        authDomain: "test-299b9.firebaseapp.com",
+        databaseURL: "https://test-299b9-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "test-299b9",
+        storageBucket: "test-299b9.firebasestorage.app",
+        messagingSenderId: "787196357246",
+        appId: "1:787196357246:web:3e669eb3075a61303d062f",
+        measurementId: "G-LCJ0PKLM48"
+    };
+    import { initializeApp } from 'firebase/app';
+    import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 
-const app = initializeApp(firebaseConfig);
-import { getDatabase, ref, set, get, update, child, query, orderByChild, equalTo, remove, onValue } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
-const database = getDatabase();
+    const app = initializeApp(firebaseConfig);
+    import { getDatabase, ref, set, get, update, child, query, orderByChild, equalTo, remove, onValue } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+    const database = getDatabase();
+</script>
+<script>
 
-function processing(snapshot) {
-            console.log('Processing function')
-            console.log(snapshot.size)
-            snapshot.forEach(function(){console.log('Key =>',snapshot.key); console.log('Value =>',snapshot.val());})
-            let Fighters = snapshot.val();
-get(firebaseRef).then(processing);
+    function fetchData() {
+    
+        const dataRef = database.ref('https://test-299b9-default-rtdb.europe-west1.firebasedatabase.app/1/Heights');
+
+        dataRef.once('value').then(snapshot);{
+            const data = snapshot.val();
+            console.log(data); 
+            displayData(data);
+        
+    }
+    
+    }
+    
+    window.onload = fetchData;
+
 
 </script>
-<head>
 
-
-</head>
-<body>
-    <h1 style="color:powderblue;">Fighter Data</h1>
-    <form id="chartStyle" name="chartStyle">
-        <label for="Option1">Line</label>
-        <input type="radio" name="cs1" id="Option1" value="line"><br>
-        <label for="Option2">Bar</label>
-        <input type="radio" name="cs1" id="Option2" value="bar" checked="checked"><br>
-        <label for="Option3">Pie</label>
-        <input type="radio" name="cs1" id="Option3" value="pie"><br>
-    </form>
-</body>
 </html>

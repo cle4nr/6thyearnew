@@ -7,8 +7,8 @@ import firebase_admin
 from firebase_admin import db
 from firebase_admin import credentials
 
-
-cred = credentials.Certificate("C:/Users/19RMcClean.ACC/Desktop/test-299b9-firebase-adminsdk-73zi2-3fa7952a98.json")
+# cred = credentials.Certificate("C:/Users/19RMcClean.ACC/Desktop/test-299b9-firebase-adminsdk-73zi2-3fa7952a98.json")
+cred = credentials.Certificate("C:/Users/ronan/OneDrive/Documents/GitHub/6thyearnew/!PROJECT/test-299b9-firebase-adminsdk-73zi2-3fa7952a98.json")
 firebase_admin.initialize_app(cred,{'databaseURL':'https://test-299b9-default-rtdb.europe-west1.firebasedatabase.app/'})
 ref = db.reference('/')
 fighters_dict = ref.get()
@@ -96,7 +96,7 @@ piestances = input('piestances (y/n):')
 if piestances == 'y':
     mylabels = ['Orthodox','Southpaw','Switch']
     y = np.array([stancesall['flyweight']['orthodox'],stancesall['flyweight']['southpaw'],stancesall['flyweight']['switch']])
-    plt.pie(y, labels = mylabels)
+    plt.pie(y, labels = mylabels, autopct = '%.0f%%')
     plt.title('Flyweight stances') #only did one weight class for this analysis, but in the website you will have the option to choose any weight class(or all)
     plt.show() 
 
@@ -192,7 +192,7 @@ piecount = input('piecount (y/n):')
 if piecount == 'y':
     mylabels = ['flyweight','bantamweight','featherweight','lightweight','welterweight','middleweight','lightheavyweight','heavyweight']
     y = np.array([countdiv['flyweight'],countdiv['bantamweight'],countdiv['featherweight'],countdiv['lightweight'],countdiv['welterweight'],countdiv['middleweight'],countdiv['lightheavyweight'],countdiv['heavyweight']])
-    plt.pie(y, labels = mylabels)
+    plt.pie(y, labels = mylabels, autopct = '%.0f%%')
     plt.title('Amount of fighters in their respective weight class')
     plt.show() 
 
@@ -203,9 +203,13 @@ if piecount == 'y':
 allfighters = dict()
 allfighters['Fighters'] = fighters_dict
 
+analytics = dict()
+analytics['Fighters per division'] = countdiv
+analytics['Stances'] = stancesall
+analytics['Heights'] = avgheight
+analytics['Reaches'] = avgreach
 
-
-# ref.set(allfighters,countdiv,stancesall,avgheight,avgreach) #the analytics for each weight class, aka all data that will be displayed on website e.g. amount of fighters per weight class, average height of weight classes etc
+ref.set((allfighters, analytics)) #the analytics for each weight class, aka all data that will be displayed on website e.g. amount of fighters per weight class, average height of weight classes etc
             
             
             
